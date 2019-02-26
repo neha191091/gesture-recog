@@ -7,6 +7,16 @@
 - Implements a wrapper around sklearn LogisticRegression for comparison and testing
 - Implements a Bidirectional LSTM with Keras
 
+# Installation and Package Requirements
+- python 3.5
+- numpy
+- tensorflow
+- keras
+- sklearn
+- matplotlib
+- jupyter
+
+
 # Run Code
 - Run the notebook Models_Training_and_Evaluation
 - It does the following
