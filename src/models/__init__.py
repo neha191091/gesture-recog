@@ -1,3 +1,4 @@
 from .log_reg_numpy import LogisticRegressionNumpy
 from .log_reg_sklearn import LogisticRegressionSklearn
 from .bidirectional_rnn_keras import BidirectionalRNNKeras
+from .bidirectional_rnn_tensorflow import BidirectionalRNNTf
