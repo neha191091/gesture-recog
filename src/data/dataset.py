@@ -3,7 +3,7 @@ import numpy as np
 import glob
 
 
-class LogisticRegressionDataSet:
+class Dataset:
     key_template = '{:d}_{:d}_{:d}_{:d}'
 
     def __init__(self, split, batch_size=20, num_features=3):
@@ -68,7 +68,7 @@ class LogisticRegressionDataSet:
             u = np.random.choice(self.test_idxs)
             data = self.data_test
 
-        return data[LogisticRegressionDataSet.key_template.format(u, d, c, r)]
+        return data[Dataset.key_template.format(u, d, c, r)]
 
     def get_padded_data_points_flat(self, split_type, normalize=True):
         if split_type == config.SplitType.train.value:

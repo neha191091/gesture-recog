@@ -1,2 +1,2 @@
-from .log_reg_dataset import LogisticRegressionDataSet
+from .dataset import Dataset
 from .utils import download_dataset
