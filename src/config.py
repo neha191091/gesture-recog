@@ -24,3 +24,10 @@ class SplitType(Enum):
     val = 'val'
     test = 'test'
 
+
+class ModelType(Enum):
+    LogisticRegressionNumpy = 'LogisticRegressionNumpy'
+    LogisticRegressionSklearn = 'LogisticRegressionSklearn'
+    BidirectionalRNNTf = 'BidirectionalRNNTf'
+    BidirectionalRNNKeras = 'BidirectionalRNNKeras'
+

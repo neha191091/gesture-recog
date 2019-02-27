@@ -96,16 +96,17 @@ class Dataset:
     def get_padded_batch_flat(self, split_type, normalize=True):
         if split_type == config.SplitType.train.value:
             vals = self.data_train
-            keys = self.train_keys[self.batch_idx:self.batch_idx+self.batch_size]
+            keylist = self.train_keys
         elif split_type == config.SplitType.val.value:
             vals = self.data_val
-            keys = self.val_keys[self.batch_idx:self.batch_idx+self.batch_size]
+            keylist = self.val_keys
         else:
             vals = self.data_test
-            keys = self.test_keys[self.batch_idx:self.batch_idx+self.batch_size]
+            keylist = self.test_keys
 
+        keys = keylist[self.batch_idx:self.batch_idx + self.batch_size]
         self.batch_idx = self.batch_idx+self.batch_size
-        if self.batch_idx > len(self.train_idxs) - self.batch_size:
+        if self.batch_idx > len(keylist) - self.batch_size:
             self.batch_idx = 0
             self._shuffle_keys()
 
