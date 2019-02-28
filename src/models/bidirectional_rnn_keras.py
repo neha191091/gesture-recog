@@ -1,17 +1,18 @@
 import numpy as np
 
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Bidirectional
+from keras.layers import Dense, LSTM, Bidirectional, Dropout
 
 
 class BidirectionalRNNKeras:
-    def __init__(self, num_classes, num_features):
+    def __init__(self, num_classes, num_features, dropout_rate=0.1):
         self.num_features = num_features
         self.num_classes = num_classes
 
         model = Sequential()
 
         model.add(Bidirectional(LSTM(3), merge_mode='concat'))
+        model.add(Dropout(rate=dropout_rate))
         model.add(Dense(num_classes, activation='softmax'))
 
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -50,5 +51,3 @@ class BidirectionalRNNKeras:
         onehot = np.zeros([len(target), self.num_classes])
         onehot[np.arange(len(target)), target] = 1
         return onehot
-
-

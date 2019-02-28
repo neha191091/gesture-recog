@@ -188,5 +188,5 @@ class LogisticRegressionNumpy:
         return np.sum(t_classes == y_classes)/y_classes.shape[0]
 
     def _get_log_loss(self, t, y):
-        return -np.sum(t*np.log(y))
+        return -np.sum(t*np.log(y)) + self.reg*np.sum(self.W*self.W)
 

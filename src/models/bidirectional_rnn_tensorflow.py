@@ -3,11 +3,11 @@ import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
 
-from tensorflow.python.ops.rnn import bidirectional_dynamic_rnn, dynamic_rnn
+from tensorflow.python.ops.rnn import bidirectional_dynamic_rnn
 
 
 class BidirectionalRNNTf:
-    def __init__(self, largest_seq_len, max_iter, num_classes, num_features, direction='both'):
+    def __init__(self, largest_seq_len, max_iter, num_classes, num_features, direction='both', dropout_keep_prob=0.9):
 
         self.num_features = num_features
         self.num_classes = num_classes
@@ -39,8 +39,8 @@ class BidirectionalRNNTf:
         lstm_bw_cell = tf.nn.rnn_cell.BasicLSTMCell(cell_size)
 
         outputs, _ = bidirectional_dynamic_rnn(lstm_fw_cell, lstm_bw_cell, X,
-                                                           sequence_length=sequence_len,
-                                                           dtype=tf.float32)
+                                               sequence_length=sequence_len,
+                                               dtype=tf.float32)
         outputs_fw, outputs_bw = outputs
 
         tf_batch_sz = tf.shape(outputs_fw)[0]
@@ -59,7 +59,8 @@ class BidirectionalRNNTf:
             outputs = outputs_fw
         else:
             outputs = outputs_bw
-        print(outputs)
+
+        outputs = tf.nn.dropout(outputs, keep_prob=dropout_keep_prob)
 
         outputs = tf.layers.dense(outputs, num_classes)
 
@@ -93,7 +94,8 @@ class BidirectionalRNNTf:
                 val_steps = 0
 
                 # Initialize iterator with training data
-                sess.run(self.iterator.initializer, feed_dict={self.X: X, self.t: t, self.sequence_len: seq_len, self.batch_size: batch_size})
+                sess.run(self.iterator.initializer,
+                         feed_dict={self.X: X, self.t: t, self.sequence_len: seq_len, self.batch_size: batch_size})
                 try:
                     with tqdm(total=len(t)) as pbar:
                         while True:
@@ -106,7 +108,9 @@ class BidirectionalRNNTf:
                     pass
 
                 # Initialize iterator with validation data
-                sess.run(self.iterator.initializer, feed_dict={self.X: X_val, self.t: t_val, self.sequence_len: seq_len_val, self.batch_size: batch_size})
+                sess.run(self.iterator.initializer,
+                         feed_dict={self.X: X_val, self.t: t_val, self.sequence_len: seq_len_val,
+                                    self.batch_size: batch_size})
                 try:
                     while True:
                         loss, acc = sess.run([self.loss_op, self.accuracy])
@@ -154,8 +158,8 @@ class BidirectionalRNNTf:
             except tf.errors.OutOfRangeError:
                 pass
 
-            #print('Accuracy = {:.4f}, loss = {:.4f}'.format(total_acc/total_steps, total_loss/total_steps))
-        return total_loss/total_steps, total_acc/total_steps
+                # print('Accuracy = {:.4f}, loss = {:.4f}'.format(total_acc/total_steps, total_loss/total_steps))
+        return total_loss / total_steps, total_acc / total_steps
 
     def predict(self, X, t, seq_len):
 
@@ -163,7 +167,7 @@ class BidirectionalRNNTf:
 
         saver = tf.train.Saver()
 
-        preds=[]
+        preds = []
 
         # Start training
         with tf.Session() as sess:
