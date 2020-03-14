@@ -1,4 +1,4 @@
-## Gesture Recognition
+## Gesture Recognition With Logistic Regression
 
 # Features
 - Dataset preparation (numpy), includes train/test and validation split, normalization etc.
